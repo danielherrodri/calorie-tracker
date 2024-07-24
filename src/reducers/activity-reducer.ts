@@ -5,13 +5,18 @@ export type ActivityActions =
     { type: 'set-activeId', payload: { id: Activity['id'] } } |
     { type: 'delete-activity', payload: { id: Activity['id'] } }
 
+const localStorageActivities = (): Activity[] => {
+    const activities = localStorage.getItem('activities')
+    return activities ? JSON.parse(activities) : []
+}
+
 export type ActivityState = {
     activities: Activity[]
     activeId: Activity['id']
 }
 
 export const initialState: ActivityState = {
-    activities: [],
+    activities: localStorageActivities(),
     activeId: ''
 }
 
