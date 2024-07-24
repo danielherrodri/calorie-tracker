@@ -19,4 +19,5 @@ export const activityReducer = (state: ActivityState = initialState, action: Act
     if (action.type === "save-activity") {
         console.log('desde el type de save-activity')
     }
+    return state
 }
