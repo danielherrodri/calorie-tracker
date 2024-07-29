@@ -1,24 +1,10 @@
-import { Dispatch, useMemo } from "react";
-import { Activity } from "../types";
-import { categories } from "../data/categories";
 import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { ActivityActions } from "../reducers/activity-reducer";
+import { useActivity } from "../hooks/useActivity";
 
-type ActivityListProps = {
-  activities: Activity[];
-  dispatch: Dispatch<ActivityActions>;
-};
-export default function ActivityList({
-  activities,
-  dispatch,
-}: ActivityListProps) {
-  const categoryName = useMemo(
-    () => (category: Activity["category"]) =>
-      categories.map((cat) => (cat.id === category ? cat.name : "")),
-    []
-  );
+export default function ActivityList() {
+  const { state, dispatch, isEmptyActivities, categoryName } = useActivity();
 
-  const isEmptyActivities = useMemo(() => activities.length === 0, [activities])
+  const { activities } = state;
 
   return (
     <>
@@ -26,7 +12,9 @@ export default function ActivityList({
         Comida y Actividades
       </h2>
 
-      {isEmptyActivities ? <p className="text-center my-5">No hay actividades aún ...</p> :
+      {isEmptyActivities ? (
+        <p className="text-center my-5">No hay actividades aún ...</p>
+      ) : (
         activities.map((activity) => (
           <div
             key={activity.id}
@@ -34,8 +22,9 @@ export default function ActivityList({
           >
             <div className="space-y-2 relative">
               <p
-                className={`absolute -top-8 -left-8 px-10 py-2 text-white uppercase font-bold ${activity.category === 1 ? "bg-lime-500" : "bg-orange-500"
-                  }`}
+                className={`absolute -top-8 -left-8 px-10 py-2 text-white uppercase font-bold ${
+                  activity.category === 1 ? "bg-lime-500" : "bg-orange-500"
+                }`}
               >
                 {categoryName(activity.category)}
               </p>
@@ -70,7 +59,7 @@ export default function ActivityList({
             </div>
           </div>
         ))
-      }
+      )}
     </>
   );
 }
